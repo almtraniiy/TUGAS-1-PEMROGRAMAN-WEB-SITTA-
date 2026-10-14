@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi Bahan Ajar | SITTA UT</title>
+    <style>
+        :root {
+            --primary-blue: #1e95cd;
+            --blue-hover: #299ac7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .stok-body {
+            background-color: var(--primary-blue);
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stok-container {
+            width: 100%;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stok-header-title {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--primary-blue);
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Tabel Stok */
+        .stok-table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .stok-table-custom th, 
+        .stok-table-custom td {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e9ecef;
+            color: #212529;
+        }
+
+        .stok-table-custom th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .stok-table-custom tbody tr {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .stok-table-custom tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .cover-img {
+            width: 38px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+
+        /* Tombol Aksi Hapus */
+        .btn-hapus {
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-hapus:hover {
+            background-color: #c82333;
+        }
+
+        /* Tombol Aksi Bawah */
+        .stok-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-tambah {
+            background-color: #ffc107;
+            color: #000000;
+            font-weight: 700;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+
+        .btn-tambah:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-kembali {
+            background-color: #ffffff;
+            color: #333333;
+            font-weight: 600;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+
+        .btn-kembali:hover {
+            background-color: #f1f3f5;
+        }
+
+        /* Styling Modal Pop-up */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-body {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-body h2 {
+            margin-bottom: 20px;
+            color: #1e95cd;
+            font-size: 1.3rem;
+        }
+        .modal .x {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none; border: none;
+            font-size: 1.5rem; cursor: pointer;
+            color: #6c757d;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .btn-submit {
+            background-color: #1e95cd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            background-color: #299ac7;
+        }
+        .detail-row {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        .detail-row strong {
+            display: inline-block;
+            width: 140px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body class="stok-body">
+
+    <div class="stok-container">
+        <!-- Judul Header -->
+        <div class="stok-header-title">
+            <span>📖 Informasi Bahan Ajar</span>
+        </div>
+
+        <!-- Tabel Daftar Stok Bahan Ajar -->
+        <table class="stok-table-custom" id="tabel-stok">
+            <thead>
+                <tr>
+                    <th>Kode Lokasi</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Jenis</th>
+                    <th>Edisi</th>
+                    <th>Stok</th>
+                    <th>Cover</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-stok">
+                <tr onclick="bukaDetail(event, '0TMP01', 'ASIP4301', 'Pengantar Ilmu Komunikasi', 'BMP', '2', '548', 'img/pengantar_komunikasi.jpg')">
+                    <td>0TMP01</td>
+                    <td>ASIP4301</td>
+                    <td>Pengantar Ilmu Komunikasi</td>
+                    <td>BMP</td>
+                    <td>2</td>
+                    <td>548</td>
+                    <td><img src="img/pengantar_komunikasi.jpg" alt="Cover" class="cover-img" onerror="this.src='https://via.placeholder.com/38x50?text=BMP'"></td>
+                    <td><button onclick="hapusBaris(event, this)" class="btn-hapus">Hapus</button></td>
+                </tr>
+                <tr onclick="bukaDetail(event, '0JKT01', 'EKMA4216', 'Manajemen Keuangan', 'BMP', '3', '392', 'img/manajemen_keuangan.jpg')">
+                    <td>0JKT01</td>
+                    <td>EKMA4216</td>
+                    <td>Manajemen Keuangan</td>
+                    <td>BMP</td>
+                    <td>3</td>
+                    <td>392</td>
+                    <td><img src="img/manajemen_keuangan.jpg" alt="Cover" class="cover-img" onerror="this.src='https://via.placeholder.com/38x50?text=BMP'"></td>
+                    <td><button onclick="hapusBaris(event, this)" class="btn-hapus">Hapus</button></td>
+                </tr>
+                <tr onclick="bukaDetail(event, '0SBY02', 'EKMA4310', 'Kepemimpinan', 'BMP', '1', '278', 'img/kepemimpinan.jpg')">
+                    <td>0SBY02</td>
+                    <td>EKMA4310</td>
+                    <td>Kepemimpinan</td>
+                    <td>BMP</td>
+                    <td>1</td>
+                    <td>278</td>
+                    <td><img src="img/kepemimpinan.jpg" alt="Cover" class="cover-img" onerror="this.src='https://via.placeholder.com/38x50?text=BMP'"></td>
+                    <td><button onclick="hapusBaris(event, this)" class="btn-hapus">Hapus</button></td>
+                </tr>
+                <tr onclick="bukaDetail(event, '0MLG01', 'BIOL4211', 'Mikrobiologi Dasar', 'BMP', '2', '165', 'img/mikrobiologi.jpg')">
+                    <td>0MLG01</td>
+                    <td>BIOL4211</td>
+                    <td>Mikrobiologi Dasar</td>
+                    <td>BMP</td>
+                    <td>2</td>
+                    <td>165</td>
+                    <td><img src="img/mikrobiologi.jpg" alt="Cover" class="cover-img" onerror="this.src='https://via.placeholder.com/38x50?text=BMP'"></td>
+                    <td><button onclick="hapusBaris(event, this)" class="btn-hapus">Hapus</button></td>
+                </tr>
+                <tr onclick="bukaDetail(event, '0UPBJJBDG', 'PAUD4401', 'Perkembangan Anak Usia Dini', 'BMP', '4', '204', 'img/paud_perkembangan.jpeg')">
+                    <td>0UPBJJBDG</td>
+                    <td>PAUD4401</td>
+                    <td>Perkembangan Anak Usia Dini</td>
+                    <td>BMP</td>
+                    <td>4</td>
+                    <td>204</td>
+                    <td><img src="img/paud_perkembangan.jpeg" alt="Cover" class="cover-img" onerror="this.src='https://via.placeholder.com/38x50?text=BMP'"></td>
+                    <td><button onclick="hapusBaris(event, this)" class="btn-hapus">Hapus</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tombol Aksi Bawah -->
+        <div class="stok-actions">
+            <button onclick="bukaModalTambah()" class="btn-tambah">➕ Tambah Data</button>
+            <a href="dashboard.html" class="btn-kembali">← Kembali ke Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Modal Detail Buku -->
+    <div class="modal" id="modalDetail">
+        <div class="modal-body">
+            <button class="x" onclick="tutupModal('modalDetail')">&times;</button>
+            <h2>📖 Detail Bahan Ajar</h2>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <img id="det-img" src="" alt="Cover" style="width: 90px; height: 120px; object-fit: cover; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            </div>
+            <div class="detail-row"><strong>Kode Lokasi:</strong> <span id="det-lokasi"></span></div>
+            <div class="detail-row"><strong>Kode Barang:</strong> <span id="det-kode"></span></div>
+            <div class="detail-row"><strong>Nama Barang:</strong> <span id="det-nama"></span></div>
+            <div class="detail-row"><strong>Jenis:</strong> <span id="det-jenis"></span></div>
+            <div class="detail-row"><strong>Edisi:</strong> <span id="det-edisi"></span></div>
+            <div class="detail-row"><strong>Stok Tersedia:</strong> <span id="det-stok"></span></div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Data Buku -->
+    <div class="modal" id="modalTambah">
+        <div class="modal-body">
+            <button class="x" onclick="tutupModal('modalTambah')">&times;</button>
+            <h2>➕ Tambah Bahan Ajar Baru</h2>
+            <form onsubmit="simpanDataBaru(event)">
+                <div class="form-group">
+                    <label>Kode Lokasi</label>
+                    <input type="text" id="add-lokasi" placeholder="contoh: 0JKT02" required>
+                </div>
+                <div class="form-group">
+                    <label>Kode Barang</label>
+                    <input type="text" id="add-kode" placeholder="contoh: SKOM4312" required>
+                </div>
+                <div class="form-group">
+                    <label>Nama Barang / Bahan Ajar</label>
+                    <input type="text" id="add-nama" placeholder="contoh: Sistem Basis Data" required>
+                </div>
+                <div class="form-group">
+                    <label>Jenis</label>
+                    <input type="text" id="add-jenis" value="BMP" required>
+                </div>
+                <div class="form-group">
+                    <label>Edisi</label>
+                    <input type="number" id="add-edisi" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Stok</label>
+                    <input type="number" id="add-stok" value="100" required>
+                </div>
+                <button type="submit" class="btn-submit">Simpan Data</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi Hapus Baris
+        function hapusBaris(event, button) {
+            event.stopPropagation(); // Mencegah modal detail terbuka saat tombol hapus diklik
+            const row = button.closest("tr");
+            if (confirm("Apakah Anda yakin ingin menghapus data bahan ajar ini?")) {
+                row.remove();
+            }
+        }
+
+        // Fungsi Membuka Modal Detail Buku
+        function bukaDetail(event, lokasi, kode, nama, jenis, edisi, stok, img) {
+            document.getElementById("det-lokasi").innerText = lokasi;
+            document.getElementById("det-kode").innerText = kode;
+            document.getElementById("det-nama").innerText = nama;
+            document.getElementById("det-jenis").innerText = jenis;
+            document.getElementById("det-edisi").innerText = edisi;
+            document.getElementById("det-stok").innerText = stok;
+            document.getElementById("det-img").src = img;
+
+            document.getElementById("modalDetail").style.display = "flex";
+        }
+
+        // Fungsi Membuka Modal Tambah Data
+        function bukaModalTambah() {
+            document.getElementById("modalTambah").style.display = "flex";
+        }
+
+        // Fungsi Menutup Modal
+        function tutupModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Fungsi Menyimpan Data Baru dari Form Modal
+        function simpanDataBaru(event) {
+            event.preventDefault();
+            
+            const lokasi = document.getElementById("add-lokasi").value;
+            const kode = document.getElementById("add-kode").value;
+            const nama = document.getElementById("add-nama").value;
+            const jenis = document.getElementById("add-jenis").value;
+            const edisi = document.getElementById("add-edisi").value;
+            const stok = document.getElementById("add-stok").value;
+            const imgSrc = "https://via.placeholder.com/38x50?text=BMP";
+
+            const tbody = document.getElementById("tbody-stok");
+            const newRow = document.createElement("tr");
+
+            // Pasang event onclick untuk memicu detail saat baris diklik
+            newRow.setAttribute("onclick", `bukaDetail(event, '${lokasi}', '${kode}', '${nama}', '${jenis}', '${edisi}', '${stok}', '${imgSrc}')`);
+
+            newRow.innerHTML = `
+                <td>${lokasi}</td>
+                <td>${kode}</td>
+                <td>${nama}</td>
+                <td>${jenis}</td>
+                <td>${edisi}</td>
+                <td>${stok}</td>
+                <td><img src="${imgSrc}" alt="Cover" class="cover-img"></td>
+                <td><button onclick="hapusBaris(event, this)" class="btn-hapus">Hapus</button></td>
+            `;
+
+            tbody.appendChild(newRow);
+            tutupModal('modalTambah');
+            alert("Data bahan ajar berhasil ditambahkan!");
+            
+            // Reset form
+            event.target.reset();
+        }
+    </script>
+    <footer style="text-align: center; padding: 25px; font-size: 0.8rem; color: var(--text-muted); margin-top: 40px;">
+        &copy; 2026 by.mutiarani ginting - Sistem informasi Tiras dan Transaksi Bahan Ajar Universitas Terbuka
+</body>
+</html>

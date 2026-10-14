@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Pengiriman - SITTA UT</title>
+    <style>
+        :root {
+            --primary-purple: #39c0ed;
+            --purple-hover: #299ac7;
+            --bg-light: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #212529;
+            --text-muted: #6c757d;
+            --border-color: #e9ecef;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* Header Navbar */
+        .sitta-header {
+            background-color: var(--primary-purple);
+            color: #ffffff;
+            width: 100%;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(57, 180, 237, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 4px;
+        }
+
+        .brand-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.78rem;
+            opacity: 0.85;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-logout {
+            background-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Konten Utama */
+        .dashboard-main {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.92rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-purple);
+        }
+
+        .btn-card-action {
+            background-color: var(--primary-purple);
+            color: #ffffff;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-card-action:hover {
+            background-color: var(--purple-hover);
+        }
+
+        /* Box Hasil Pelacakan */
+        .tracking-result-box {
+            display: none;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            margin-top: 20px;
+        }
+
+        .tracking-result-box h4 {
+            margin-bottom: 15px;
+            color: var(--primary-purple);
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .tracking-info-item {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .tracking-info-item strong {
+            display: inline-block;
+            width: 160px;
+            color: var(--text-muted);
+        }
+
+        /* Timeline Riwayat Perjalanan */
+        .timeline-list {
+            margin-top: 15px;
+            border-left: 2px solid var(--primary-purple);
+            padding-left: 15px;
+            list-style: none;
+        }
+
+        .timeline-item {
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .timeline-time {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .timeline-desc {
+            font-size: 0.88rem;
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header class="sitta-header">
+        <div class="header-left">
+            <img src="assets/logo-ut.png" alt="Logo UT" class="header-logo" onerror="this.style.display='none'">
+            <div>
+                <div class="brand-title">SITTA UT - Tracking Pengiriman</div>
+                <div class="brand-subtitle">Sistem Informasi Tugas Tutorial dan Administrasi</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="dashboard.html" class="btn-logout">
+                &larr; Kembali ke Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Konten Utama Tracking -->
+    <main class="dashboard-main">
+        <div class="welcome-card">
+            <h3 style="color: var(--primary-purple); margin-bottom: 6px; font-size: 1.2rem;">🔍 Cari Status Pengiriman</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">Masukkan nomor Delivery Order (DO) untuk melacak pengiriman bahan ajar</p>
+            <p style="font-size: 0.8rem; color: #555; margin-bottom: 20px;"><em>Contoh DO: <strong>2023001234</strong>, <strong>20200012345</strong>, atau <strong>2023005678</strong></em></p>
+            
+            <form onsubmit="handleTracking(event)">
+                <div class="form-group">
+                    <label for="no-do">Nomor Delivery Order</label>
+                    <input type="text" id="no-do" placeholder="Masukkan nomor DO..." required>
+                </div>
+                <button type="submit" class="btn-card-action">Cari</button>
+            </form>
+        </div>
+
+        <!-- Hasil Pelacakan Dinamis -->
+        <div id="tracking-result" class="tracking-result-box">
+            <h4>Detail Informasi Pengiriman DO: <span id="res-do" style="color: #333;"></span></h4>
+            <div class="tracking-info-item"><strong>Nama Penerima:</strong> <span id="res-nama"></span></div>
+            <div class="tracking-info-item"><strong>Status Pengiriman:</strong> <span id="res-status" style="color: #28a745; font-weight: bold;"></span></div>
+            <div class="tracking-info-item"><strong>Ekspedisi:</strong> <span id="res-ekspedisi"></span></div>
+            <div class="tracking-info-item"><strong>Tanggal Kirim:</strong> <span id="res-tanggal"></span></div>
+            <div class="tracking-info-item"><strong>Paket / Lokasi:</strong> <span id="res-paket"></span></div>
+            <div class="tracking-info-item"><strong>Total Pembayaran:</strong> <span id="res-total"></span></div>
+
+            <h5 style="margin-top: 20px; margin-bottom: 10px; color: var(--text-dark); font-size: 0.95rem;">📦 Riwayat Perjalanan Paket:</h5>
+            <ul id="res-perjalanan" class="timeline-list">
+                <!-- Daftar riwayat perjalanan akan dimasukkan otomatis lewat JavaScript -->
+            </ul>
+        </div>
+    </main>
+<footer style="text-align: center; padding: 25px; font-size: 0.8rem; color: var(--text-muted); margin-top: 40px;">
+        &copy; 2026 by.mutiarani ginting - Sistem informasi Tiras dan Transaksi Bahan Ajar Universitas Terbuka
+    </footer>
+
+    <script>
+        // Data tracking, kunci = nomor DO
+        var dataTracking = {
+            "2023001234": {
+                nomorDO: "2023001234",
+                nama: "Rina Wulandari",
+                status: "Dalam Perjalanan",
+                ekspedisi: "JNE",
+                tanggalKirim: "2025-08-25",
+                paket: "0JKT01",
+                total: "Rp 180.000",
+                perjalanan: [
+                    { waktu: "2025-08-25 10:12:20", keterangan: "Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka" },
+                    { waktu: "2025-08-25 14:07:56", keterangan: "Tiba di Hub: TANGERANG SELATAN" },
+                    { waktu: "2025-08-25 15:20:00", keterangan: "Diteruskan ke Kantor Jakarta Selatan" }
+                ]
+            },
+            "20200012345": {
+                nomorDO: "20200012345",
+                nama: "Mutiarani",
+                status: "Dikirim",
+                ekspedisi: "Pos Indonesia",
+                tanggalKirim: "2025-08-25",
+                paket: "0UPBJJ PALEMBANG",
+                total: "Rp 220.000",
+                perjalanan: [
+                    { waktu: "2025-08-25 10:12:20", keterangan: "Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka" },
+                    { waktu: "2025-08-25 14:07:56", keterangan: "Tiba di Hub: PALEMBANG" },
+                    { waktu: "2025-08-25 16:30:10", keterangan: "Diteruskan ke Kantor Kota PALEMBANG" },
+                    { waktu: "2025-08-26 12:15:33", keterangan: "Tiba di Hub: Kota PALEMBANG" },
+                    { waktu: "2025-08-26 15:06:12", keterangan: "Proses antar ke PRABUMULIH" },
+                    { waktu: "2025-08-26 20:00:00", keterangan: "Selesai Antar. Penerima: Mutiarani" }
+                ]
+            },
+            "2023005678": {
+                nomorDO: "2023005678",
+                nama: "Agus Pranoto",
+                status: "Dikirim",
+                ekspedisi: "Pos Indonesia",
+                tanggalKirim: "2025-08-25",
+                paket: "0UPBJJBDG",
+                total: "Rp 220.000",
+                perjalanan: [
+                    { waktu: "2025-08-25 10:12:20", keterangan: "Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka" },
+                    { waktu: "2025-08-25 14:07:56", keterangan: "Tiba di Hub: TANGERANG SELATAN" },
+                    { waktu: "2025-08-25 16:30:10", keterangan: "Diteruskan ke Kantor Kota Bandung" },
+                    { waktu: "2025-08-26 12:15:33", keterangan: "Tiba di Hub: Kota BANDUNG" },
+                    { waktu: "2025-08-26 15:06:12", keterangan: "Proses antar ke Cimahi" },
+                    { waktu: "2025-08-26 20:00:00", keterangan: "Selesai Antar. Penerima: Agus Pranoto" }
+                ]
+            }
+        };
+
+        function handleTracking(event) {
+            event.preventDefault();
+            const doVal = document.getElementById("no-do").value.trim();
+            const resultBox = document.getElementById("tracking-result");
+            const resDoText = document.getElementById("res-do");
+            const timelineContainer = document.getElementById("res-perjalanan");
+
+            // Periksa apakah nomor DO ada di dalam variabel dataTracking
+            if (dataTracking[doVal]) {
+                const info = dataTracking[doVal];
+
+                resDoText.innerText = info.nomorDO;
+                document.getElementById("res-nama").innerText = info.nama;
+                document.getElementById("res-status").innerText = info.status;
+                document.getElementById("res-ekspedisi").innerText = info.ekspedisi;
+                document.getElementById("res-tanggal").innerText = info.tanggalKirim;
+                document.getElementById("res-paket").innerText = info.paket;
+                document.getElementById("res-total").innerText = info.total;
+
+                // Kosongkan timeline sebelumnya lalu isi dengan riwayat perjalanan baru
+                timelineContainer.innerHTML = "";
+                info.perjalanan.forEach(item => {
+                    const li = document.createElement("li");
+                    li.className = "timeline-item";
+                    li.innerHTML = `
+                        <div class="timeline-time">${item.waktu}</div>
+                        <div class="timeline-desc">${item.keterangan}</div>
+                    `;
+                    timelineContainer.appendChild(li);
+                });
+
+                resultBox.style.display = "block";
+            } else {
+                alert("Nomor Delivery Order (DO) '" + doVal + "' tidak ditemukan! Coba gunakan nomor: 2023001234, 20200012345, atau 2023005678");
+                resultBox.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

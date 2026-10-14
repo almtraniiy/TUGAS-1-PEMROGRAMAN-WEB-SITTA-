@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histori Transaksi Bahan Ajar - SITTA UT</title>
+    <style>
+        :root {
+            --primary-green: #269bc9;
+            --green-hover: #1e92c7;
+            --bg-light: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #212529;
+            --text-muted: #6c757d;
+            --border-color: #1182ce;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Atas Horizontal Sesuai Gambar */
+        .navbar-sitta {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            height: 100%;
+        }
+
+        /* Daftar Menu Navigasi */
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-menu a {
+            padding: 0 18px;
+            text-decoration: none;
+            color: #495057;
+            font-size: 0.92rem;
+            font-weight: 500;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-green);
+        }
+
+        /* Menu Aktif (Histori Transaksi) dengan Garis Hijau di Bawah */
+        .nav-menu li.active a {
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .nav-menu li.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--primary-green);
+        }
+
+        /* Dropdown Menu Laporan */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background-color: #ffffff;
+            min-width: 260px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            z-index: 1100;
+        }
+
+        .dropdown-menu a {
+            padding: 14px 18px;
+            display: block;
+            color: var(--text-dark);
+            font-size: 0.88rem;
+            height: auto;
+            border-bottom: 1px solid #f1f3f5;
+            white-space: normal;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f8f9fa;
+            color: var(--primary-green);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Konten Utama Halaman */
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Tombol Kembali Hijau di Bawah Navbar */
+        .btn-kembali-box {
+            max-width: 1100px;
+            margin: 25px auto 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .btn-kembali {
+            background-color: var(--primary-green);
+            color: #ffffff;
+            padding: 9px 22px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+            box-shadow: 0 2px 5px rgba(46, 105, 48, 0.2);
+        }
+
+        .btn-kembali:hover {
+            background-color: var(--green-hover);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            margin-top: 15px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Atas Horizontal Sesuai Gambar -->
+    <header class="navbar-sitta">
+        <div class="nav-left">
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="stok.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                
+                <!-- Menu Aktif Histori Transaksi -->
+                <li class="active"><a href="histori.html">Histori Transaksi Bahan Ajar</a></li>
+                
+                <!-- Dropdown Laporan -->
+                <li class="dropdown">
+                    <a href="#">Laporan ▼</a>
+                    <div class="dropdown-menu">
+                        <a href="laporan.html">Monitoring Progress DO Bahan Ajar</a>
+                        <a href="laporan.html">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tombol Kembali Sesuai Gambar -->
+    <div class="btn-kembali-box">
+        <a href="dashboard.html" class="btn-kembali">Kembali</a>
+    </div>
+
+    <!-- Konten Utama Halaman Histori -->
+    <main class="container">
+        <div class="card">
+            <h2>Histori Transaksi Bahan Ajar</h2>
+            <p>Daftar riwayat transaksi dan pemesanan modul bahan ajar mahasiswa Universitas Terbuka.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Transaksi</th>
+                        <th>Tanggal</th>
+                        <th>Nama Mahasiswa</th>
+                        <th>Kode Bahan Ajar</th>
+                        <th>Jumlah</th>
+                        <th>Total Harga</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TRX-88219</td>
+                        <td>2026-10-10</td>
+                        <td>Mutiara</td>
+                        <td>EKMA4216</td>
+                        <td>3 Eksampler</td>
+                        <td>Rp 135.000</td>
+                        <td><span style="color: #2e6930; font-weight: 600;">Selesai</span></td>
+                    </tr>
+                    <tr>
+                        <td>TRX-88220</td>
+                        <td>2026-10-11</td>
+                        <td>Rina Wulandari</td>
+                        <td>ASIP4301</td>
+                        <td>2 Eksampler</td>
+                        <td>Rp 95.000</td>
+                        <td><span style="color: #d97706; font-weight: 600;">Diproses</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer style="text-align: center; padding: 25px; font-size: 0.8rem; color: var(--text-muted); margin-top: 40px;">
+        &copy; 2026 by.mutiarani ginting - Sistem informasi Tiras dan Transaksi Bahan Ajar Universitas Terbuka
+    </footer>
+</body>
+</html>

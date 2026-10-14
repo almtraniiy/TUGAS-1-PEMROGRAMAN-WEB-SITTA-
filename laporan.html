@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan - SITTA UT</title>
+    <style>
+        :root {
+            --primary-green: #2ca2d9;
+            --green-hover: #1b8cbc;
+            --bg-light: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #212529;
+            --text-muted: #6c757d;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Atas */
+        .navbar-sitta {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            height: 100%;
+        }
+
+        /* Tombol Logout */
+        .btn-logout {
+            background-color: #1fa3d3;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background-color: #1186a1;
+        }
+
+        /* Tombol Kembali ke Dashboard di Navbar */
+        .btn-kembali-nav {
+            background-color: #64748b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-kembali-nav:hover {
+            background-color: #475569;
+        }
+
+        /* Daftar Menu Navigasi */
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .nav-menu li {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-menu a {
+            padding: 0 16px;
+            text-decoration: none;
+            color: #495057;
+            font-size: 0.9rem;
+            font-weight: 500;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-green);
+        }
+
+        .nav-menu li.active > a {
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .nav-menu li.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--primary-green);
+        }
+
+        /* Dropdown Menu Laporan */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            background-color: #ffffff;
+            min-width: 270px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            z-index: 1100;
+        }
+
+        .dropdown-menu a {
+            padding: 14px 18px;
+            display: block;
+            color: var(--text-dark);
+            font-size: 0.88rem;
+            height: auto;
+            border-bottom: 1px solid #f1f3f5;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f8f9fa;
+            color: var(--primary-green);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Konten Utama */
+        .dashboard-main {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Panel Konten Dinamis */
+        .content-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            display: none;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        .content-panel h2 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        /* Tabel Data */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: #f4faf5;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .badge-status {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .total-row td {
+            font-weight: 700;
+            background-color: #fafbfc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Atas -->
+    <header class="navbar-sitta">
+        <div class="nav-left">
+            <button class="btn-logout" onclick="localStorage.clear(); window.location.href='index.html';">Logout</button>
+            <a href="dashboard.html" class="btn-kembali-nav">← Kembali ke Dashboard</a>
+            
+            <ul class="nav-menu">
+                <li id="menu-laporan" class="dropdown active">
+                    <a href="#">Laporan ▼</a>
+                    <div class="dropdown-menu" style="display: block;">
+                        <a onclick="showSection('monitoring-section')">Monitoring Progress DO Bahan Ajar</a>
+                        <a onclick="showSection('rekap-section')">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            <span id="dynamic-greeting">Memuat sapaan...</span> | 
+            <span id="live-datetime"></span>
+        </div>
+    </header>
+
+    <!-- Konten Utama -->
+    <main class="dashboard-main">
+        
+        <!-- 1. HALAMAN MONITORING PROGRESS DO -->
+        <div id="monitoring-section" class="content-panel active">
+            <h2>Monitoring Progress DO Bahan Ajar</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nomor DO</th>
+                        <th>Nama</th>
+                        <th>Ekspedisi</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2023001234</td>
+                        <td>Rina Wulandari</td>
+                        <td>JNE</td>
+                        <td><span class="badge-status">Dalam Perjalanan</span></td>
+                    </tr>
+                    <tr>
+                        <td>2023005678</td>
+                        <td>Mutiara</td>
+                        <td>Pos Indonesia</td>
+                        <td><span class="badge-status">Dikirim</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 2. HALAMAN REKAP BAHAN AJAR -->
+        <div id="rekap-section" class="content-panel">
+            <h2>Rekap Bahan Ajar</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Edisi</th>
+                        <th>Stok</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ASIP4301</td>
+                        <td>Pengantar Ilmu Komunikasi</td>
+                        <td>2</td>
+                        <td>548</td>
+                    </tr>
+                    <tr>
+                        <td>EKMA4216</td>
+                        <td>Manajemen Keuangan</td>
+                        <td>3</td>
+                        <td>392</td>
+                    </tr>
+                    <tr>
+                        <td>EKMA4310</td>
+                        <td>Kepemimpinan</td>
+                        <td>1</td>
+                        <td>278</td>
+                    </tr>
+                    <tr>
+                        <td>BIOL4211</td>
+                        <td>Mikrobiologi Dasar</td>
+                        <td>2</td>
+                        <td>165</td>
+                    </tr>
+                    <tr>
+                        <td>PAUD4401</td>
+                        <td>Perkembangan Anak Usia Dini</td>
+                        <td>4</td>
+                        <td>204</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="3" style="text-align: right;">Total stok</td>
+                        <td>1587</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script>
+        // Fungsi untuk Navigasi Antar Menu Laporan Tanpa Refresh
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            const targetPanel = document.getElementById(sectionId);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        // Fungsi Proses Login (Bisa digunakan di halaman login atau disatukan)
+        function prosesLogin() {
+            let inputElement = document.getElementById("username");
+            if (!inputElement) return;
+            
+            let inputUser = inputElement.value.toLowerCase();
+
+            if (inputUser === "mutiara") {
+                localStorage.setItem("sitta_nama", "Mutiara");
+            } else if (inputUser === "agus") {
+                localStorage.setItem("sitta_nama", "Agus");
+            } else if (inputUser === "rina") {
+                localStorage.setItem("sitta_nama", "Rina");
+            } else {
+                localStorage.setItem("sitta_nama", "Admin");
+            }
+
+            window.location.href = "dashboard.html";
+        }
+
+        // Sapaan & Waktu Real-Time Dinamis Berdasarkan Nama User yang Login
+        function updateDashboardInfo() {
+            // 1. Ambil data nama user dari localStorage
+            let namaUser = localStorage.getItem("sitta_nama") || 
+                           localStorage.getItem("sitta_user_nama") || 
+                           localStorage.getItem("username") || 
+                           localStorage.getItem("nama"); 
+
+            // 2. Jika di localStorage kosong, cek apakah ada parameter nama di URL
+            if (!namaUser) {
+                const urlParams = new URLSearchParams(window.location.search);
+                namaUser = urlParams.get('user') || urlParams.get('nama');
+            }
+
+            // 3. Jika masih kosong, gunakan default "Admin"
+            if (!namaUser) {
+                namaUser = "Admin","mutiara";
+            }
+            
+            // Format huruf kapital rapi di awal (contoh: mutiara -> Mutiara, agus -> Agus, rina -> Rina, admin -> Admin)
+            namaUser = namaUser.charAt(0).toUpperCase() + namaUser.slice(1).toLowerCase();
+
+            const now = new Date();
+            const hours = now.getHours();
+            let waktuGreeting = "Selamat Malam";
+
+            if (hours >= 4 && hours < 11) {
+                waktuGreeting = "Selamat Pagi";
+            } else if (hours >= 11 && hours < 15) {
+                waktuGreeting = "Selamat Siang";
+            } else if (hours >= 15 && hours < 18) {
+                waktuGreeting = "Selamat Sore";
+            }
+
+            // Gabungkan menjadi kalimat sapaan yang lengkap
+            const greetingText = `${waktuGreeting}, ${namaUser}`;
+
+            const greetingEl = document.getElementById("dynamic-greeting");
+            if (greetingEl) {
+                greetingEl.innerText = greetingText;
+            }
+
+            const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+            const tanggalStr = now.toLocaleDateString('id-ID', options);
+            const jamStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/:/g, '.');
+            
+            const datetimeEl = document.getElementById("live-datetime");
+            if (datetimeEl) {
+                datetimeEl.innerText = `${tanggalStr} | ${jamStr}`;
+            }
+        }
+
+        updateDashboardInfo();
+        setInterval(updateDashboardInfo, 1000);
+    </script>
+
+    <footer style="text-align: center; padding: 25px; font-size: 0.8rem; color: var(--text-muted); margin-top: 40px;">
+        &copy; 2026 by.mutiarani ginting - Sistem informasi Tiras dan Transaksi Bahan Ajar Universitas Terbuka
+    </footer>
+</body>
+</html>
